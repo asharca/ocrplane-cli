@@ -25,7 +25,7 @@ class ContentBlock(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     type: str
-    bbox: list[float]
+    bbox: list[float] | None = None
     text: str | None = None
     text_level: float | None = None
     page_idx: float | None = None
