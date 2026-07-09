@@ -8,5 +8,5 @@ COPY pyproject.toml README.md ./
 COPY src ./src
 RUN pip install --no-cache-dir .
 
-CMD ["ocr-mcp"]
-
+ENTRYPOINT ["ocrplane"]
+CMD ["--help"]

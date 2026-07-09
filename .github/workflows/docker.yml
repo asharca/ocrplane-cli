@@ -25,6 +25,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/ocr-mcp:latest
-            ghcr.io/${{ github.repository_owner }}/ocr-mcp:${{ github.sha }}
-
+            ghcr.io/${{ github.repository_owner }}/ocrplane-cli:latest
+            ghcr.io/${{ github.repository_owner }}/ocrplane-cli:${{ github.sha }}

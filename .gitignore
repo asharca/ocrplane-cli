@@ -4,7 +4,7 @@ __pycache__/
 *.pyc
 .env
 .env.*
+!.env.example
 dist/
 build/
 *.egg-info/
-
