@@ -22,7 +22,26 @@ command is `ocrplane`.
 
 ## Online Install
 
-Recommended isolated install with `pipx`:
+Recommended install with `uv`:
+
+```bash
+uv tool install "git+https://github.com/asharca/ocrplane-cli.git"
+ocrplane --help
+```
+
+Run once without installing:
+
+```bash
+uvx --from "git+https://github.com/asharca/ocrplane-cli.git" ocrplane --help
+```
+
+Upgrade later:
+
+```bash
+uv tool upgrade ocrplane-cli
+```
+
+Alternative isolated install with `pipx`:
 
 ```bash
 pipx install "git+https://github.com/asharca/ocrplane-cli.git"
@@ -79,6 +98,22 @@ If `python3` is missing:
 brew install python
 ```
 
+Install with `uv`:
+
+```bash
+brew install uv
+uv tool install "git+https://github.com/asharca/ocrplane-cli.git"
+ocrplane --help
+```
+
+Or install `uv` with the official standalone installer:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv tool install "git+https://github.com/asharca/ocrplane-cli.git"
+ocrplane --help
+```
+
 Optional isolated install with `pipx`:
 
 ```bash
@@ -122,6 +157,20 @@ python3 -m pip install --user pipx
 python3 -m pipx ensurepath
 pipx install "git+https://github.com/asharca/ocrplane-cli.git"
 ocrplane --help
+```
+
+Install with `uv`:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv tool install "git+https://github.com/asharca/ocrplane-cli.git"
+ocrplane --help
+```
+
+Run once with `uvx`:
+
+```bash
+uvx --from "git+https://github.com/asharca/ocrplane-cli.git" ocrplane --help
 ```
 
 ## Configure
