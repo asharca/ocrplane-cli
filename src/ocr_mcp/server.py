@@ -87,7 +87,9 @@ def _download_file(file_url: str) -> tuple[str, str]:
 
 
 def _decode_base64(content: str, filename: str) -> tuple[str, str]:
-    raw = base64.b64decode(content)
+    if "," in content and content.lstrip().lower().startswith("data:"):
+        content = content.split(",", 1)[1]
+    raw = base64.b64decode(content, validate=True)
     if len(raw) > MAX_BASE64_BYTES:
         raise OcrPlaneError("base64_content is too large; use file_url for large documents.")
     suffix = Path(filename).suffix or ".bin"
@@ -103,6 +105,9 @@ def _resolve_upload(
     base64_content: str | None,
     filename: str | None,
 ) -> tuple[str, str, bool]:
+    provided = [bool(file_path), bool(file_url), bool(base64_content)]
+    if sum(provided) != 1:
+        raise OcrPlaneError("Provide exactly one of file_path, file_url, or base64_content.")
     if file_path:
         path = Path(file_path).expanduser()
         if not path.exists() or not path.is_file():
@@ -127,21 +132,21 @@ def _upload_parse(
     start_page_id: int | None,
     end_page_id: int | None,
 ) -> dict[str, Any]:
-    data: list[tuple[str, str]] = [
-        ("backend", backend),
-        ("parse_method", parse_method),
-        ("formula_enable", "true" if formula_enable else "false"),
-        ("table_enable", "true" if table_enable else "false"),
-    ]
-    for lang_part in [part.strip() for part in lang.split(",") if part.strip()]:
-        data.append(("lang_list", lang_part))
+    lang_list = [part.strip() for part in lang.split(",") if part.strip()]
+    data: dict[str, Any] = {
+        "backend": backend,
+        "parse_method": parse_method,
+        "formula_enable": "true" if formula_enable else "false",
+        "table_enable": "true" if table_enable else "false",
+        "lang_list": lang_list or ["ch"],
+    }
     if start_page_id is not None:
-        data.append(("start_page_id", str(start_page_id)))
+        data["start_page_id"] = str(start_page_id)
     if end_page_id is not None:
-        data.append(("end_page_id", str(end_page_id)))
+        data["end_page_id"] = str(end_page_id)
 
     with open(path, "rb") as fh:
-        files = {"file": (filename, fh)}
+        files = {"file": (filename, fh, "application/octet-stream")}
         return _request("POST", "/api/parse", data=data, files=files, timeout=120)
 
 
@@ -350,4 +355,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

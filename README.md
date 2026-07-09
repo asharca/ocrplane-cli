@@ -42,11 +42,16 @@ Prefer the `OCRPLANE_*` names for new deployments.
 - `reprocess_task`: rotate/reprocess existing tasks.
 - `list_tasks`: list task history for the configured API key user.
 
-`parse_document` accepts one of:
+`parse_document` accepts exactly one of:
 
-- `file_path`: a file path inside the MCP container.
+- `file_path`: a file path inside the MCP container. In ToolPlane this is not
+  the same filesystem as an attached sandbox or a user chat upload.
 - `file_url`: recommended for large files.
 - `base64_content`: small-file fallback, capped at 25 MB decoded.
+
+For ToolPlane agents, prefer `file_url` when the document is already reachable
+over HTTP, or `base64_content` for small documents. Use `file_path` only when the
+file has been mounted or created inside the OcrPlane MCP deployment container.
 
 ## Local Run
 
@@ -61,4 +66,3 @@ ocr-mcp
 ```
 
 The server uses FastMCP's default STDIO transport.
-
